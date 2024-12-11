@@ -3,8 +3,6 @@
 import struct
 import zlib
 
-NODE_UINT_BYTE = ("I", 4) #UNTESTED CONFIGURATION. CHANGE THIS TO `("Q", 8)` FOR 7.5 VERSION SUPPORT
-
 # PROTOTRACER CLASS
 class Vector3D:
     X: int
@@ -46,6 +44,7 @@ class Node:
 
 # THE PIPELINE
 def GetMorphObject(file: str, name: str, scale: float):
+    NODE_UINT_BYTE = ("I", 4)
     morph = MorphObject()
     with open(file, "rb") as file:
         def read_node() -> Node:
@@ -110,11 +109,11 @@ def GetMorphObject(file: str, name: str, scale: float):
             raise ValueError("!!!FILE MAGIC HEADER IS NOT BINARY FBX FILE!!!")
         version = struct.unpack("<I", file.read(4))[0]
         if version > 7400:
-            raise NotImplementedError(f"!!!fbx VERSION {version} IS UNSUPPORTED. TRY CHANGING `NODE_UINT_BYTE` VALUE FOR 7.5 SUPPORT")
+            NODE_UINT_BYTE = ("Q", 8)
+            print("===USING UINT64 [VERSION >7.4]===")
         elif version < 7000:
             raise NotImplementedError(f"!!!FBX VERSION {version} IS UNSUPPORTED, UPGRADE TO VERSION 7.4!!!")
 
-        mesh_count = 0
         shape_keys = []
         base_mesh = Object3D()
         find_node(b"Objects")
@@ -124,9 +123,6 @@ def GetMorphObject(file: str, name: str, scale: float):
             for _ in range(geometry_node.num_properties):
                 infos.append(read_prop())
             if b"Mesh" in infos:
-                mesh_count += 1
-                if mesh_count > 1:
-                    raise ValueError("!!!MORE THAN ONE MESH FOUND. ONLY ONE MESH REQUIRED!!!")
                 props = get_nodes_prop([b"Vertices", b"PolygonVertexIndex"])
                 vertices = []
                 triangles = []
