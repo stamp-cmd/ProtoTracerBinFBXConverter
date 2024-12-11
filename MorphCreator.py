@@ -1,5 +1,6 @@
 import enum
-from FBXReader import *
+# from FBXReader import * # Remove to enable ASCII FBX Parser
+from B_FBXReader import *
 
 #write header
 class MorphCreator:
@@ -97,6 +98,7 @@ class MorphCreator:
 
         return morphObjects
 
+    # Binary FBX Parser doesn't have function to parse this yet, as it is not needed (for now)
     def GetRotationPositionOffset(self):
         #Quaternion rotation
         rotationPosition = "\tQuaternion offsetRotation = Rotation(EulerAngles(Vector3D("
