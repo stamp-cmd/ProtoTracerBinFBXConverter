@@ -1,4 +1,4 @@
-# FBXProtoTracerBConverter
+# BinaryFBXProtoTracerConverter
 Converts Binary FBX files (in native python) to ProtoTracer compatible blendshape files
 
 ## Info:
