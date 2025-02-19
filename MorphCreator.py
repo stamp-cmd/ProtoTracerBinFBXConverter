@@ -10,7 +10,8 @@ class MorphCreator:
         self.morphObj = morphObj
 
     def GetHeader(self, name):
-        return "#pragma once\n\n#include \"..\\Utils\\Morph.h\"\n#include \"..\\..\\..\\..\\Utils\\Math\\Rotation.h\"\n#include \"..\\..\\..\\..\\Scene\\Materials\\Static\\SimpleMaterial.h\"\n#include \"..\\..\\..\\..\\Scene\\Objects\\Object3D.h\"\n#include \"..\\..\\..\\..\\Renderer\\Utils\\IndexGroup.h\"\n\nclass " + name + "{\npublic:\n"
+        # replace \ with /
+        return "#pragma once\n\n#include \"../Utils/Morph.h\"\n#include \"../../../../Utils/Math/Rotation.h\"\n#include \"../../../../Scene/Materials/Static/SimpleMaterial.h\"\n#include \"../../../../Scene/Objects/Object3D.h\"\n#include \"../../../../Renderer/Utils/IndexGroup.h\"\n\nclass " + name + "{\npublic:\n"
 
         #return "#pragma once\n\n#include \"..\Utils\Morph.h\"\n#include \"..\..\..\..\Utils\Math\Rotation.h\"\n#include \"..\..\..\..\Scene\Materials\Static\SimpleMaterial.h\"\n#include \"..\..\..\..\Scene\Objects\Object3D.h\"\n#include \"..\..\..\..\Renderer\Utils\IndexGroup.h\"\n\nclass " + name + "{\npublic:\n"
         #return "#pragma once\n\n#include \"Arduino.h\"\n#include \"..\Math\Rotation.h\"\n#include \"Morph.h\"\n#include \"..\Materials\SimpleMaterial.h\"\n#include \"..\Render\IndexGroup.h\"\n#include \"..\Render\Object3D.h\"\n\nclass " + name + "{\npublic:\n"
