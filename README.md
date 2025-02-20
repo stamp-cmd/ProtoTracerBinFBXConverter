@@ -9,13 +9,21 @@ Converts Binary FBX files (in native python) to ProtoTracer compatible blendshap
 1. Clone the repository
 2. Open `Converter.py`
 3. Edit the `name` variable to the FBX file's name
-4. Put the FBX file in `Commissions` folder, or change to the directory of your fbx file
-5. Change the `outputName` to ```outputName = f"{name}.h"```, If your FBX converter folder isn't next to prototracer folder.
-6. Run ```python Converter.py``` (Python 3)
+4. Put the FBX file in `Commissions` folder, or change to the directory of your fbx file in `origFileName`
+5. Change the `outputName` to
+```python
+outputName = f"{name}.h" #If your FBX converter folder isn't next to prototracer folder.
+```
+6. Run
+```bash
+python Converter.py
+```
 7. Place the converted file (.h file) inside`/lib/ProtoTracer/Assets/Models/FBX/commissions/ `
 8. open `/ProtoTracer/lib/ProtoTracer/Examples/Protogen/ProtogenHUB75Project.h` or `/ProtoTracer/lib/ProtoTracer/Examples/Protogen/ProtogenWS35Project.h` and replace all NukudeFace with name of your file
-9. change line 5 to ```#include "../../Assets/Models/FBX/commissions/<filename>.h"```
-
+10. change line 5 to
+```c
+#include "../../Assets/Models/FBX/commissions/<filename>.h"
+```
 > Special thanks to smoluwu for instruction >w<
 
 ## Info:
