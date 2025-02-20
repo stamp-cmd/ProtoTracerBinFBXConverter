@@ -43,10 +43,10 @@ class Node:
         return self.end_offset + self.num_properties + self.property_list_len + len(self.name) == 0
 
 # THE PIPELINE
-def GetMorphObject(file: str, name: str, scale: float):
+def GetMorphObject(filename: str, name: str, scale: float):
     NODE_UINT_BYTE = ("I", 4)
     morph = MorphObject()
-    with open(file, "rb") as file:
+    with open(filename, "rb") as file:
         def read_node() -> Node:
             node = Node()
             node.end_offset, node.num_properties, node.property_list_len = struct.unpack(
