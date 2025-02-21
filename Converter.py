@@ -11,7 +11,7 @@ from B_FBXReader import *
 
 name = "NukudeFaceBinary" # EDIT THE FILE NAME HERE
 origFileName = Path(f"Example/{name}.fbx") # EDIT THE MODEL DIRECTORY HERE (IF NEEDED)
-outputName = Path(f"../ProtoTracer/lib/ProtoTracer/Assets/Models/FBX/Commissions/{name}.h") # EDIT THE OUTPUT DIRECTORY HERE (IF NEEDED)
+outputName = Path(f"../ProtoTracer/lib/ProtoTracer/Assets/Models/FBX/{name}.h") # EDIT THE OUTPUT DIRECTORY HERE (IF NEEDED)
 
 morphCreator = MorphCreator(GetMorphObject(origFileName, name, 10.0)) #default is centimeters, prototracer uses millimeters
 
