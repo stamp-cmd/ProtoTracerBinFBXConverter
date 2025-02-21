@@ -1,0 +1,5 @@
+BRANCH debuggable
+* B_FBXReader added non-triangulated mesh warning and multiple seperated mesh warning
+* Renamed folder from Output to Legacy, NewOutput to Output, Example Files to Example
+* Use NukudeFaceBinary as default file
+* Converter.py remove old comments
