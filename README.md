@@ -25,6 +25,11 @@ python Converter.py
 ```
 > Special thanks to smoluwu for instruction >w<
 
+## Basic troubleshooting
+### ValueError: Multiple mesh detected. MESH "..."
+Join all meshes to a single mesh.
+![Multiple meshes](multiple mesh.png)
+
 ## Info:
 ### Supported version
 FBX Version 7+
