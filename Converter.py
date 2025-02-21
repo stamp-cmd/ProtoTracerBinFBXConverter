@@ -9,7 +9,7 @@ from MorphCreator import *
 from B_FBXReader import *
 #* import os
 
-name = "UnicornZhenja"
+name = "NukudeFaceFlatBinary"
 origFileName = f"Commissions\{name}.fbx"
 outputName = f"..\ProtoTracer\lib\ProtoTracer\Assets\Models\FBX\Commissions\{name}.h"
 #* newFileName = f"Output\{name}Ascii.fbx"
