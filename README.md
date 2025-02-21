@@ -28,7 +28,7 @@ python Converter.py
 ## Basic troubleshooting
 ### ValueError: Multiple mesh detected. MESH "..."
 Join all meshes to a single mesh.
-![Multiple meshes](multiple mesh.png)
+![Multiple meshes](multiple-mesh.png)
 
 ## Info:
 ### Supported version
