@@ -1,8 +1,13 @@
 # BinaryFBXProtoTracerConverter
-[**BRANCH: DEBUGGABLE**] Converts Binary FBX files (in native python) to ProtoTracer compatible blendshape file.
+[**BRANCH: DEBUGGABLE**. If things break switch to [main branch](https://github.com/stamp-cmd/ProtoTracerBinFBXConverter/tree/main) ] Converts Binary FBX files (in native python) to ProtoTracer compatible blendshape file.
 ## FBX Model requirements:
-- The model **must** be triangulated.
-- The file **must** only contain one mesh, or multiple meshes grouped into one.
+> [!WARNING]
+> The model **must** be triangulated.
+> 
+> The file **must** only contain one mesh, or multiple meshes grouped into one.
+
+> [!TIP]
+> Face mesh **should** be under 100 triangles
 
 ## Instruction:
 1. Clone the repository
