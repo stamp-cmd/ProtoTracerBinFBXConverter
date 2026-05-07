@@ -1,5 +1,7 @@
 # BinaryFBXProtoTracerConverter
-[**BRANCH: DEBUGGABLE**. If things break switch to [main branch](https://github.com/stamp-cmd/ProtoTracerBinFBXConverter/tree/main) ] Converts Binary FBX files (in native python) to ProtoTracer compatible blendshape file.
+[**BRANCH: DEBUGGABLE**. If things break switch to [main branch](https://github.com/stamp-cmd/ProtoTracerBinFBXConverter/tree/main) ]
+
+Converts Binary FBX files (in native python) to ProtoTracer compatible blendshape file.
 ## FBX Model requirements:
 > [!WARNING]
 > The model **must** be triangulated.
@@ -41,4 +43,5 @@ Join all the mesh to a single mesh
 FBX Version 7+
 ### Implementation
 FBX Parser: based on [Blender Developer's Blog.](https://code.blender.org/2013/08/fbx-binary-file-format-specification)
+
 Converter: based on [Prototracer-Helper](https://github.com/coelacant1/ProtoTracer-Helpers/tree/main/FBX-Converter)
