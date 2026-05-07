@@ -9,7 +9,7 @@ from MorphCreator import *
 from B_FBXReader import *
 
 
-name = "NukudeFaceBinary" # EDIT THE FILE NAME HERE
+name = "NukudeFaceFlatBinary" # EDIT THE FILE NAME HERE
 origFileName = f"Example/{name}.fbx" # EDIT THE MODEL DIRECTORY HERE (IF NEEDED)
 outputName = f"../ProtoTracer/lib/ProtoTracer/Assets/Models/FBX/{name}.h" # EDIT THE OUTPUT DIRECTORY HERE (IF NEEDED)
 

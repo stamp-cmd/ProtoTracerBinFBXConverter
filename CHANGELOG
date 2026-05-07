@@ -3,3 +3,7 @@ BRANCH debuggable
 * Renamed folder from Output to Legacy, NewOutput to Output, Example Files to Example
 * Use NukudeFaceBinary as default file
 * Converter.py remove old comments
+
+07-05-2026
+* Documentation changes to B_FBXReader.py
+* Stronger typing to B_FBXReader.py via assert 

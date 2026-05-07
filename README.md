@@ -31,9 +31,10 @@ python Converter.py
 > Special thanks to smoluwu for instruction >w<
 
 ## Basic troubleshooting
-### ValueError: Multiple mesh detected. MESH "..."
-Join all meshes to a single mesh.
-![Multiple meshes](multiple-mesh.png)
+### ValueError: !!!MESH NOT TRIANGULATED. MESH: <Name>!!!
+Triangulate the model
+### ValueError: !!!MULTIPLE MESH DETECTED. MESH: <Name>!!!
+Join all the mesh to a single mesh
 
 ## Info:
 ### Supported version
