@@ -31,9 +31,9 @@ python Converter.py
 > Special thanks to smoluwu for instruction >w<
 
 ## Basic troubleshooting
-### ValueError: !!!MESH NOT TRIANGULATED. MESH: <Name>!!!
+### ValueError: !!!MESH NOT TRIANGULATED. MESH: \<Name\>!!!
 Triangulate the model
-### ValueError: !!!MULTIPLE MESH DETECTED. MESH: <Name>!!!
+### ValueError: !!!MULTIPLE MESH DETECTED. MESH: \<Name\>!!!
 Join all the mesh to a single mesh
 
 ## Info:
