@@ -10,6 +10,7 @@ Converts Binary FBX files (in native python) to ProtoTracer compatible blendshap
 
 > [!TIP]
 > Face mesh **should** be under 100 triangles
+> Recommend workflow is to try to modify NukudeFaceFlat to your liking.
 
 ## Instruction:
 1. Clone the repository
@@ -32,16 +33,44 @@ python Converter.py
 ```
 > Special thanks to smoluwu for instruction >w<
 
-## Basic troubleshooting
+## Basic converter troubleshooting
 ### ValueError: !!!MESH NOT TRIANGULATED. MESH: \<Name\>!!!
-Triangulate the model
+Triangulate the model.
+
 ### ValueError: !!!MULTIPLE MESH DETECTED. MESH: \<Name\>!!!
-Join all the mesh to a single mesh
+Join all the mesh to a single mesh.
+
+## Basic model troubleshooting
+*Assuming out of the box Prototracer code*
+
+### Very thin line, small dot
+#### Export orientation
+Make sure you export your FBX file with correct orientation.
+
+Blender default FBX export setting:
+ - Scale: 1.00
+ - Apply Scalings: All Local
+ - Forward: -Z Forward
+ - Up: Y Up
+ - [x] Apply Unit
+ - [x] Use Space Transform
+ - [ ] Apply Transform
+
+Default NukudeFaceFlat is on XY Plane, with Z-axis points at you 
+
+#### Model bounds
+Prototracer automatically scale face to fit the screen. If there are something larger than the actual face, it might scale the face down.
+
+Check you model bound by selecting your mesh, and going to Object Properties (orange square one).
+Go to Viewport Display, and check the "Bounds" option, make sure it is selected as "Box".
+Then you'll see a wireframe box, make sure it actually fits the model.
+
+*I don't have actual hardware that can run prototracer, so I cannot test all edge cases sadly.*
 
 ## Info:
 ### Supported version
 FBX Version 7+
 ### Implementation
-FBX Parser: based on [Blender Developer's Blog.](https://code.blender.org/2013/08/fbx-binary-file-format-specification)
+FBX Parser: based on [Blender Developer's Blog](https://code.blender.org/2013/08/fbx-binary-file-format-specification)
 
 Converter: based on [Prototracer-Helper](https://github.com/coelacant1/ProtoTracer-Helpers/tree/main/FBX-Converter)
