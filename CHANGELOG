@@ -7,3 +7,7 @@ BRANCH debuggable
 07-05-2026
 * Documentation changes to B_FBXReader.py
 * Stronger typing to B_FBXReader.py via assert 
+
+17-05-2026
+* Coerce signed zero to unsigned, required >= Python 3.11
+* Added DONT_USE_POINTERS option in MorphCreator.py

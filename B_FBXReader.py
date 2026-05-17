@@ -2,10 +2,10 @@
 
 import struct
 import zlib
-from typing import Union, TypeAlias
+from typing import TypeAlias
 from collections.abc import Iterable
 
-PROPS_TYPE: TypeAlias = Union[int, str, list[int], list[float]]
+PROPS_TYPE: TypeAlias = int | str | list[int] | list[float]
 
 # PROTOTRACER CLASS
 class Vector3D:
@@ -129,7 +129,7 @@ def GetMorphObject(filename: str, name: str, scale: float):
                 node.name = file.read(str_len)
             return node
 
-        def find_node(name: bytes) -> Union[Node, None]:
+        def find_node(name: bytes) -> Node | None:
             """Linear searching for Node with same name.
             
             Returns: Node (with matching name)"""
@@ -208,7 +208,7 @@ def GetMorphObject(filename: str, name: str, scale: float):
         _ = find_node(b"Objects")
         object_node = read_node()
         while not object_node.is_null():
-            infos: list[Union[str, int]] = []
+            infos: list[str | int] = []
             if object_node.name == b"Geometry":
                 for _ in range(object_node.num_properties):
                     _p: PROPS_TYPE = read_prop();
@@ -282,7 +282,7 @@ def GetMorphObject(filename: str, name: str, scale: float):
             # Read list of model ID's and name. This was added to detect if there are multiple object.
             # Model's name is only used for debugging.
             elif object_node.name == b"Model":
-                model_props: list[Union[int, str]] = []
+                model_props: list[int | str] = []
                 for i in range(object_node.num_properties):
                     _p: PROPS_TYPE = read_prop()
                     assert isinstance(_p, int) or isinstance(_p, str)
@@ -299,7 +299,7 @@ def GetMorphObject(filename: str, name: str, scale: float):
         _ = find_node(b"Connections")
         conn_node = read_node()
         while not conn_node.is_null():
-            conn_props: list[Union[int, str]] = []
+            conn_props: list[int | str] = []
             for i in range(conn_node.num_properties):
                 _p: PROPS_TYPE = read_prop()
                 assert isinstance(_p, int) or isinstance(_p, str)

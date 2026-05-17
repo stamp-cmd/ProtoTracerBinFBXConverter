@@ -2,6 +2,8 @@ import enum
 # from FBXReader import * # Remove to enable ASCII FBX Parser
 from B_FBXReader import *
 
+DONT_USE_POINTERS = False
+
 #write header
 class MorphCreator:
     morphObj = MorphObject()
@@ -27,19 +29,27 @@ class MorphCreator:
         return enums
 
     def GetBasisVertices(self):
-        basisVertices = "\tVector3D* basisVertices = new Vector3D[" + str(int(self.morphObj.baseMesh.VertexCount / 3)) + "] {"
+        basisVertices = ""
+        if (DONT_USE_POINTERS):
+            basisVertices = "\tVector3D basisVertices[" + str(int(self.morphObj.baseMesh.VertexCount / 3)) + "] = {"
+        else:
+            basisVertices = "\tVector3D* basisVertices = new Vector3D[" + str(int(self.morphObj.baseMesh.VertexCount / 3)) + "] {"
 
         for i, vertex in enumerate(self.morphObj.baseMesh.Vertices):
             if i in {len(self.morphObj.baseMesh.Vertices) - 1}:
-                basisVertices += "Vector3D(" + f'{vertex.X:.4f}' + "f," + f'{vertex.Y:.4f}' + "f," + f'{vertex.Z:.4f}' + "f)};\n" #last entry
+                basisVertices += "Vector3D(" + f'{vertex.X:z.4f}' + "f," + f'{vertex.Y:z.4f}' + "f," + f'{vertex.Z:z.4f}' + "f)};\n" #last entry
             else:
-                basisVertices += "Vector3D(" + f'{vertex.X:.4f}' + "f," + f'{vertex.Y:.4f}' + "f," + f'{vertex.Z:.4f}' + "f),"
-                print(f'{vertex.X:.4f}' + "," + f'{vertex.Y:.4f}' + "," + f'{vertex.Z:.4f}'  + ",")
+                basisVertices += "Vector3D(" + f'{vertex.X:z.4f}' + "f," + f'{vertex.Y:z.4f}' + "f," + f'{vertex.Z:z.4f}' + "f),"
+                print(f'{vertex.X:.4f}' + "," + f'{vertex.Y:z.4f}' + "," + f'{vertex.Z:z.4f}'  + ",")
 
         return basisVertices
 
     def GetBasisIndexes(self):
-        basisIndexes = "\tIndexGroup* basisIndexes = new IndexGroup[" + str(self.morphObj.baseMesh.TriangleCount) + "] {"
+        basisIndexes = ""
+        if (DONT_USE_POINTERS):
+            basisIndexes = "\tIndexGroup basisIndexes[" + str(self.morphObj.baseMesh.TriangleCount) + "] = {"
+        else:
+            basisIndexes = "\tIndexGroup* basisIndexes = new IndexGroup[" + str(self.morphObj.baseMesh.TriangleCount) + "] {"
 
         for i, index in enumerate(self.morphObj.baseMesh.Triangles):
             if i in {len(self.morphObj.baseMesh.Triangles) - 1}:
@@ -60,7 +70,10 @@ class MorphCreator:
         morphIndexes = "\tstatic const uint8_t morphCount = " + str(len(self.morphObj.shapeKeys)) + ";\n"
 
         for shapeKey in self.morphObj.shapeKeys:
-            morphIndexes += "\tint* " + shapeKey.Name + "Indexes = new int[" + str(shapeKey.IndexCount) + "] {"
+            if (DONT_USE_POINTERS):
+                morphIndexes += "\tint " + shapeKey.Name + "Indexes[" + str(shapeKey.IndexCount) + "] = {"
+            else:
+                morphIndexes += "\tint* " + shapeKey.Name + "Indexes = new int[" + str(shapeKey.IndexCount) + "] {"
 
             for i, index in enumerate(shapeKey.Indexes):
                 if i in {len(shapeKey.Indexes) - 1}:
@@ -76,13 +89,16 @@ class MorphCreator:
         morphVectors = ""
 
         for shapeKey in self.morphObj.shapeKeys:
-            morphVectors += "\tVector3D* " + shapeKey.Name + "Vectors = new Vector3D[" + str(int(shapeKey.VertexCount / 3)) + "] {"
+            if (DONT_USE_POINTERS):
+                morphVectors += "\tVector3D " + shapeKey.Name + "Vectors[" + str(int(shapeKey.VertexCount / 3)) + "] = {"
+            else:
+                morphVectors += "\tVector3D* " + shapeKey.Name + "Vectors = new Vector3D[" + str(int(shapeKey.VertexCount / 3)) + "] {"
 
             for i, vertex in enumerate(shapeKey.Vertices):
                 if i in {len(shapeKey.Vertices) - 1}:
-                    morphVectors += "Vector3D(" + f'{vertex.X:.4f}' + "f," + f'{vertex.Y:.4f}'+ "f," + f'{vertex.Z:.4f}' + "f)};\n"
+                    morphVectors += "Vector3D(" + f'{vertex.X:z.4f}' + "f," + f'{vertex.Y:z.4f}'+ "f," + f'{vertex.Z:z.4f}' + "f)};\n"
                 else:
-                    morphVectors += "Vector3D(" + f'{vertex.X:.4f}' + "f," + f'{vertex.Y:.4f}' + "f," + f'{vertex.Z:.4f}' + "f),"
+                    morphVectors += "Vector3D(" + f'{vertex.X:z.4f}' + "f," + f'{vertex.Y:z.4f}' + "f," + f'{vertex.Z:z.4f}' + "f),"
 
         morphVectors += "\n"
 

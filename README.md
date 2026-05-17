@@ -10,7 +10,7 @@ Converts Binary FBX files (in native python) to ProtoTracer compatible blendshap
 
 > [!TIP]
 > Face mesh **should** be under 100 triangles
-> 
+>
 > Recommend workflow is to try to modify NukudeFaceFlat to your liking.
 
 ## Instruction:
@@ -33,6 +33,20 @@ python Converter.py
 #include "../../Assets/Models/FBX/<filename>.h"
 ```
 > Special thanks to smoluwu for instruction >w<
+
+## Python version
+\>= 3.11 (recommended 3.13+)
+
+## Config options
+### IGNORE_ERROR
+Inside `B_FBXReader.py`. Ignore multiple meshes error and non-triangulated mesh error.
+
+### DONT_USE_POINTERS
+Inside `MorphCreator.py`. Change header file from
+```cpp
+type* Name = new type[SIZE] {}; // from
+type Name[SIZE] = {}; // to
+```
 
 ## Basic converter troubleshooting
 ### ValueError: !!!MESH NOT TRIANGULATED. MESH: \<Name\>!!!
