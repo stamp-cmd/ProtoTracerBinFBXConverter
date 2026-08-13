@@ -14,9 +14,9 @@ class Vector3D:
         self.Y = 0
         self.Z = 0
 
-    X: int
-    Y: int
-    Z: int
+    X: float
+    Y: float
+    Z: float
 
 class Triangle:
     A: int = 1
@@ -77,8 +77,9 @@ class Node:
         return self.end_offset + self.num_properties + self.property_list_len + len(self.name) == 0
 
 IGNORE_ERROR = False
+BOUND_SIZE = False
 
-""" Brief FBX structure. Imhex can help visalize FBX file structure.
+""" Brief FBX structure. ImHex can help visualize FBX file structure.
 FBX
 ├── header
 │   ├── magic
@@ -109,10 +110,15 @@ FBX
 (... means don't care)
 """
 
+
 # THE PIPELINE
 def GetMorphObject(filename: str, name: str, scale: float):
     NODE_UINT_BYTE = ("I", 4)
     morph = MorphObject()
+
+    min_x = min_y = min_z = float("inf")
+    max_x = max_y = max_z = float("-inf")
+
     with open(filename, "rb") as file:
         def read_node() -> Node:
             """Deserialize bytes to Node class. Stop reading before properties section.
@@ -205,37 +211,48 @@ def GetMorphObject(filename: str, name: str, scale: float):
 
         shape_keys: list[ShapeKey] = []
         base_mesh = Object3D()
+
         _ = find_node(b"Objects")
         object_node = read_node()
         while not object_node.is_null():
             infos: list[str | int] = []
             if object_node.name == b"Geometry":
                 for _ in range(object_node.num_properties):
-                    _p: PROPS_TYPE = read_prop();
+                    _p: PROPS_TYPE = read_prop()
                     assert isinstance(_p, str) or isinstance(_p, int)
                     infos.append(_p)
+                
                 # Read the primary mesh data
                 assert isinstance(infos[2], str)
                 if infos[2] == "Mesh":
                     props = get_nodes_prop([b"Vertices", b"PolygonVertexIndex"])
                     vertices: list[Vector3D] = []
                     triangles: list[Triangle] = []
-                    assert isinstance(props[0], Iterable) and all(isinstance(x, float) for x in props[0])
+                    assert isinstance(props[0], list) # Pyright stuff
                     for i in range(0, len(props[0]), 3):
                         vertex = Vector3D()
                         vertex.X, vertex.Y, vertex.Z = (
                             props[0][i] * scale, props[0][i+1] * scale, props[0][i+2] * scale
                         )
+
+                        if BOUND_SIZE:
+                            min_x = min(props[0][i] * scale, min_x)
+                            min_y = min(props[0][i + 1] * scale, min_y)
+                            max_z = max(props[0][i + 2] * scale, max_z)
+                            max_x = max(props[0][i] * scale, max_x)
+                            max_y = max(props[0][i + 1] * scale, max_y)
+                            max_z = max(props[0][i + 2] * scale, max_z)
+
                         print(f"Vertex: [{vertex.X}, {vertex.Y}, {vertex.Z}]")
                         vertices.append(vertex)
 
-                    assert isinstance(props[1], Iterable) and all(isinstance(x, int) for x in props[1])
+                    assert isinstance(props[1], list)
                     assert isinstance(infos[1], str)
                     for i in range(0, len(props[1]), 3):
                         triangle = Triangle()
                         try:
                             triangle.A, triangle.B, triangle.C = (
-                                props[1][i], props[1][i+1], (props[1][i+2] * -1) - 1
+                                int(props[1][i]), int(props[1][i+1]), int((props[1][i+2] * -1) - 1)
                             )
                         # Detection by IndexError, Index indivisible by 3
                         except IndexError as e:
@@ -255,20 +272,26 @@ def GetMorphObject(filename: str, name: str, scale: float):
                 elif infos[2] == "Shape":
                     shape_key = ShapeKey()
                     # shape_key name probably lived in static field
-                    shape_key.Name = list(
-                        # Parse name
-                        filter(lambda i: isinstance(i, str) and "\x00\x01Geometry" in i, infos))[0][:-10]
+                    # Parse name
+                    shape_key.Name = list(filter(lambda i: isinstance(i, str) and "\x00\x01Geometry" in i, infos))[0][:-10]
                     props = get_nodes_prop([b"Indexes", b"Vertices"])
                     vertices = []
 
-                    assert isinstance(props[0], Iterable) and all(isinstance(x, int) for x in props[0])
-                    assert isinstance(props[1], Iterable) and all(isinstance(x, float) for x in props[1])
+                    assert isinstance(props[0], list)
+                    assert isinstance(props[1], list)
                     for i in range(0, len(props[1]), 3):
                         vertex = Vector3D()
                         vertex.X, vertex.Y, vertex.Z = (
                             props[1][i] * scale, props[1][i+1] * scale, props[1][i+2] * scale
                         )
                         vertices.append(vertex)
+                        if BOUND_SIZE:
+                            min_x = min(props[1][i] * scale, min_x)
+                            min_y = min(props[1][i + 1] * scale, min_y)
+                            min_z = min(props[1][i + 2] * scale, min_z)
+                            max_x = max(props[1][i] * scale, max_x)
+                            max_y = max(props[1][i + 1] * scale, max_y)
+                            max_z = max(props[1][i + 2] * scale, max_z)
                         print(f"Vertex: [{vertex.X}, {vertex.Y}, {vertex.Z}]")
 
                     shape_key.IndexCount = len(props[0])
@@ -313,6 +336,23 @@ def GetMorphObject(filename: str, name: str, scale: float):
                     + models_name[models_id.index(conn_props[1])][:-7] + "\"!!!")
             conn_node = read_node()
         print(f"Created {len(shape_keys)} shape keys.")
+
+        OFFSET = 1
+        STOP = 8
+        # OFFSET: 1, STOP 8 | For all corner of 3D bounding box
+        # OFFSET: 7, STOP: 8 |  For generating top-left-front vertex and bottom-right-back vertex
+        # OFFSET: 1, STOP: 4 |  For generating vertices from top-left-front to bottom-right-front. (i.e. a plane with z = z_max) 
+
+        if BOUND_SIZE:
+            # Add bounding box vertices, using bitwise to decide between min/max
+            for i in range(0, STOP, OFFSET):
+                vtx = Vector3D()
+                vtx.X = [min_x, max_x][i & 1]
+                vtx.Y = [min_y, max_y][(i & 2) >> 1]
+                vtx.Z = [max_z, min_z][(i & 4) >> 2]
+                base_mesh.Vertices.append(vtx)
+            base_mesh.VertexCount += 24 - 3 * OFFSET + 3 # MorphCreator divide by 3
+
         morph.name = name
         morph.baseMesh = base_mesh
         morph.shapeKeys = shape_keys
